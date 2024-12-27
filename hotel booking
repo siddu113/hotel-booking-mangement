@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to store room details
+struct Room {
+    int roomNumber;
+    char roomType[30];
+    int totalRooms;
+    int roomsAvailable;
+};
+
+// Function to initialize room details
+void initializeRoom(struct Room *r, int roomNumber, const char *roomType, int totalRooms) {
+    r->roomNumber = roomNumber;
+    strcpy(r->roomType, roomType);
+    r->totalRooms = totalRooms;
+    r->roomsAvailable = totalRooms;  // Initially, all rooms are available
+}
+
+// Function to display room details
+void displayRoom(struct Room r) {
+    printf("\nRoom Number: %d\n", r.roomNumber);
+    printf("Room Type: %s\n", r.roomType);
+    printf("Total Rooms: %d\n", r.totalRooms);
+    printf("Available Rooms: %d\n", r.roomsAvailable);
+}
+
+// Function to book rooms
+void bookRoom(struct Room *r, int roomsToBook) {
+    if (roomsToBook > r->roomsAvailable) {
+        printf("Not enough rooms available! Only %d rooms are available.\n", r->roomsAvailable);
+    } else {
+        r->roomsAvailable -= roomsToBook;
+        printf("Successfully booked %d rooms.\n", roomsToBook);
+        printf("Rooms remaining: %d\n", r->roomsAvailable);
+    }
+}
+
+int main() {
+    // Initialize room types and details
+    struct Room rooms[3];
+
+    initializeRoom(&rooms[0], 101, "Single", 20);   // Room 101: Single
+    initializeRoom(&rooms[1], 201, "Double", 15);   // Room 201: Double
+    initializeRoom(&rooms[2], 301, "Suite", 5);     // Room 301: Suite
+
+    int choice, roomsToBook, roomChoice;
+
+    while (1) {
+        // Main menu for hotel management
+        printf("\nHotel Management System\n");
+        printf("1. View Room Information\n");
+        printf("2. Book Rooms\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                // Display all room information
+                for (int i = 0; i < 3; i++) {
+                    displayRoom(rooms[i]);
+                }
+                break;
+
+            case 2:
+                // Select a room type to book rooms
+                printf("Select a room type to book rooms:\n");
+                printf("1. Single\n2. Double\n3. Suite\n");
+                printf("Enter your choice (1-3): ");
+                scanf("%d", &roomChoice);
+
+                if (roomChoice < 1 || roomChoice > 3) {
+                    printf("Invalid choice! Please select a valid room type.\n");
+                    break;
+                }
+
+                // Ask for the number of rooms to book
+                printf("Enter the number of rooms to book: ");
+                scanf("%d", &roomsToBook);
+
+                // Book rooms for the selected room type
+                bookRoom(&rooms[roomChoice - 1], roomsToBook);
+                break;
+
+            case 3:
+                // Exit the program
+                printf("Exiting the system...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
